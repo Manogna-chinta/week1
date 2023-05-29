@@ -4,7 +4,7 @@
      aws
 ### services used in cloud 
      S3 bucket
-     CDN
+     Cloud front for CDN
      Certificate manager
 ### CI/CD
      Jenkins
