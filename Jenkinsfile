@@ -15,7 +15,6 @@ stages {
         stage ('Deploy to S3'){ 
             steps{ 
                 echo "Deploying" 
-                sh ' aws s3 cp ./index.html s3://manogna.tech'
             } 
         }
 
@@ -23,10 +22,10 @@ stages {
 
     post{
         success {
-            echo "success"
+            echo "Hurray! success"
         }
         failure {
-            echo "failure"
+            echo "failed"
         }
     }
 }
