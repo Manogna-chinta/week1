@@ -1,26 +1,29 @@
-pipeline{
+pipeline {
     agent any 
-stages {
-        stage ('Build'){
+    options {
+        cache('my-cache') {
+            customWorkspace 'src'
+            files 'pom.xml', 'src/**/*'
+        }
+    }
+    stages {
+        stage ('Build') {
             steps {
                 echo "Building stage"
             }
         }
-        stage ('Test'){
+        stage ('Test') {
             steps {
                 echo "Testing stage"
-
             }
         }
-        stage ('Deploy to S3'){ 
-            steps{ 
-                echo "Deploying" 
-            } 
+        stage ('Deploy to S3') {
+            steps {
+                echo "Deploying"
+            }
         }
-
     }
-
-    post{
+    post {
         success {
             echo "Hurray! success"
         }
