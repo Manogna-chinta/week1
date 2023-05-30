@@ -1,31 +1,41 @@
-pipeline{
-    agent any 
-stages {
-        stage ('Build'){
+pipeline {
+    agent any
+
+    stages {
+        stage ('Build') {
             steps {
-                echo "Building stage"
+                echo 'Building stage'
+                jobCacher(cacheName: 'my-cache') {
+                    // Add build steps here
+                    // ...
+                }
             }
         }
-        stage ('Test'){
+        
+        stage ('Test') {
             steps {
-                echo "Testing stage"
-
+                echo 'Testing stage'
+                jobCacher(cacheName: 'my-cache', restore: true) {
+                    // Add test steps here
+                    // ...
+                }
             }
         }
-        stage ('Deploy to S3'){ 
-            steps{ 
-                echo "Deploying" 
-            } 
-        }
 
+        stage ('Deploy to S3') {
+            steps {
+                echo 'Deploying'
+            }
+        }
     }
 
-    post{
+    post {
         success {
-            echo "Hurray! success"
+            echo 'Hurray! success'
         }
         failure {
-            echo "failed"
+            echo 'Failed'
+            currentBuild.result = 'FAILURE'
         }
     }
 }
