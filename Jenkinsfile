@@ -1,41 +1,36 @@
 pipeline {
     agent any
-
+    
     stages {
-        stage ('Build') {
+        stage('Build') {
             steps {
                 echo 'Building stage'
-                jobCacher(cacheName: 'my-cache') {
-                    // Add build steps here
-                    // ...
-                }
             }
         }
         
-        stage ('Test') {
+        stage('Test') {
             steps {
                 echo 'Testing stage'
-                jobCacher(cacheName: 'my-cache', restore: true) {
-                    // Add test steps here
-                    // ...
-                }
             }
         }
-
-        stage ('Deploy to S3') {
+        
+        stage('Deploy to S3') {
             steps {
                 echo 'Deploying'
+                sh 'aws s3 cp ./index.html s3://www.manogna.tech'
+                sh 'aws cloudfront create-invalidation --distribution-id E1B95DH1ZMXB3V --paths "/*"'
             }
         }
     }
-
+    
     post {
         success {
             echo 'Hurray! success'
+            // Add actions to perform on success
         }
         failure {
             echo 'Failed'
-            currentBuild.result = 'FAILURE'
+            // Add actions to perform on failure
         }
     }
 }
