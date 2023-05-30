@@ -1,31 +1,32 @@
 pipeline {
-    agent any 
-    options {
-        caches('my-cache')
-    }
+    agent any
+
     stages {
-        stage ('Build') {
+        stage('Build') {
             steps {
-                echo "Building stage"
+                echo 'Building stage'
+                cache(key: 'my-cache', paths: ['pom.xml', 'src/**/*'])
             }
         }
-        stage ('Test') {
+        stage('Test') {
             steps {
-                echo "Testing stage"
+                echo 'Testing stage'
+                unstash 'my-cache'
             }
         }
-        stage ('Deploy to S3') {
+        stage('Deploy to S3') {
             steps {
-                echo "Deploying"
+                echo 'Deploying'
             }
         }
     }
+
     post {
         success {
-            echo "Hurray! success"
+            echo 'Hurray! success'
         }
         failure {
-            echo "failed"
+            echo 'failed'
         }
     }
 }
