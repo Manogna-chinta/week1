@@ -1,10 +1,7 @@
 pipeline {
     agent any 
     options {
-        cache('my-cache') {
-            customWorkspace 'src'
-            files 'pom.xml', 'src/**/*'
-        }
+        caches('my-cache')
     }
     stages {
         stage ('Build') {
