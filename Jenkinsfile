@@ -1,40 +1,31 @@
-pipeline {
-    agent any
+pipeline{
+    agent any 
+stages {
+        stage ('Build'){
+            steps {
+                echo "Building stage"
+            }
+        }
+        stage ('Test'){
+            steps {
+                echo "Testing stage"
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building stage'
-                // Cache the artifacts using Job Cacher Plugin
-                jobCacher(cacheName: 'my-cache') {
-                    // Define the steps for the build
-                    // ...
-                }
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Testing stage'
-                // Restore the cached artifacts using Job Cacher Plugin
-                jobCacher(cacheName: 'my-cache', restore: true) {
-                    // Define the steps for testing
-                    // ...
-                }
-            }
+        stage ('Deploy to S3'){ 
+            steps{ 
+                echo "Deploying" 
+            } 
         }
-        stage('Deploy to S3') {
-            steps {
-                echo 'Deploying'
-            }
-        }
+
     }
 
-    post {
+    post{
         success {
-            echo 'Hurray! success'
+            echo "Hurray! success"
         }
         failure {
-            echo 'failed'
+            echo "failed"
         }
     }
 }
